@@ -1,0 +1,44 @@
+{% extends "template.html" %} 
+
+{% block title %}Chatrooms{% endblock %}
+
+{% block css %} 
+{% load static %}
+<link href="{% static 'css/chatIndex.css' %}" ref="stylesheet">
+<link href="{% static 'css/bootstrap.min.toggle.css' %}" rel="stylesheet">
+
+{% endblock %} 
+{% block content %}
+<div class="row">
+	<div class="col-md-9">
+		<button type="button" id="createRoom" class="btn btn-primary pull-right">Create Chatroom</button>
+		<input id="toggleChoice" type="checkbox" checked data-toggle="toggle" data-on="All chatrooms" data-off="My chatrooms" data-onstyle="success" data-offstyle="danger">
+	</div>
+	<div class="col-md-3">
+		<form action="" class="search-form">
+			<div class="form-group has-feedback">
+				<label for="search" class="sr-only">Search</label> <input
+					type="text" class="form-control" name="search" id="search"
+					placeholder="search"> <span
+					class="glyphicon glyphicon-search form-control-feedback"></span>
+			</div>
+		</form>
+	</div>
+
+
+</div>
+
+<!-- The list of chatrooms -->
+<div class="row">
+	<div class="col-md-9" style="margin-top: 20px;">
+		<ul id="roomList" class="list-group">
+		</ul>
+	</div>
+</div>
+{% endblock %} 
+
+{% block js %}
+<script src="{% static 'js/bootstrap.min.toggle.js' %}"></script>
+<script src="{% static 'js/chatIndex.js' %}"></script>
+<script src="{% static 'js/csrf_token.js' %}"></script>
+{% endblock %}

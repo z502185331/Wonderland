@@ -1,0 +1,14 @@
+{ 
+	"roomId":{{roomId}},
+  	"users":[
+		{% for user in users %}
+			{%spaceless%}
+				{
+					"username":"{{user.user.username}}",
+					"icon":"{{user.icon}}"
+				}
+			{%endspaceless%}
+			{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+	]
+}

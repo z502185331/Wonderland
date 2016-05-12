@@ -1,0 +1,16 @@
+{ 
+	"roomId":{{roomId}},
+  	"msgs":[
+		{% for msg in msgs %}
+			{%spaceless%}
+				{
+					"username":"{{msg.user.username}}",
+					"content" : "{{msg.msg}}",
+					"time" : {{msg.time}},
+					"icon":"{{msg.user.info.icon}}"
+				}
+			{%endspaceless%}
+			{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+	]
+}

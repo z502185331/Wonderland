@@ -1,0 +1,14 @@
+{
+	"items":[
+		{% for room in chatrooms %}
+			{%spaceless%}
+				{
+					"title":"{{room.title}}",
+					"id":"{{room.id}}",
+					"count": {{room.count}}
+				}
+			{%endspaceless%}
+			{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+	]
+}

@@ -1,0 +1,48 @@
+{% extends "template.html" %} {% block title %}Chatroom:
+{{chatroom.title}}{% endblock %} {% block css %} {% load static %}
+<link href="{% static 'css/chatroom.css' %}" rel="stylesheet">
+{% endblock %} 
+
+{% block content %}
+<input type="hidden" id="roomId" value="{{chatroom.id}}">
+<div class="row">
+	<div class="col-md-9">
+		<div class="panel panel-primary">
+			<div class="panel-heading" id="accordion">
+				<span class="glyphicon glyphicon-comment"></span> {{chatroom.title}}
+			</div>
+			<div class="panel-body">
+				<ul class="chat" id="msgList">
+				</ul>
+			</div>
+			<div class="panel-footer">
+				<div class="input-group">
+					<input id="btn-input" type="text" class="form-control input-sm"
+						placeholder="Type your message here..." /> <span
+						class="input-group-btn">
+						<button class="btn btn-warning btn-sm" id="sendMsg">
+							Send</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading" id="accordion">
+				<span class="glyphicon glyphicon-user"></span> 
+
+			</div>
+			<div class="panel-body-user">
+				<ul class="userlist">
+				</ul>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %} {% block js %}
+<script src="{% static 'js/chatroom.js' %}"></script>
+<script src="{% static 'js/csrf_token.js' %}"></script>
+{% endblock %}
