@@ -78,7 +78,7 @@ def enterRoom(request):
     # Add user to the cache, the number of user increased
     global room_key, user_prefix
     cache.incr(room_key % (roomId))
-    cache.set(user_prefix % (roomId) + user.username, user.username)
+    cache.set(user_prefix % (roomId) + user.username, user.username, timeout = 10)
     return HttpResponse('')
 
 
@@ -138,5 +138,9 @@ def getMsg(request, roomId, refreshTime):
     '''
     msgs = readRecentMsgFromCache(roomId, refreshTime)
     context = {'roomId' : roomId, 'msgs' : msgs}
+    user = request.user;
+    
+    # Refresh the ttl of user in cache
+    cache.set(user_prefix % (roomId) + user.username, user.username, timeout = 10)
     return render(request, 'json/msgs.json', context, content_type = 'application/json')
     
