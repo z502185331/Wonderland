@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'chatroom',
     'account',
     'base',
+    'novelCrawl',
 )
 
 MIDDLEWARE_CLASSES = (

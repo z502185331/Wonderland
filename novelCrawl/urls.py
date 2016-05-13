@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from . import views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^wonderland/account/', include('account.urls')),
-    url(r'^wonderland/chat/', include('chatroom.urls')),
-    url(r'^wonderland/novel/', include('novelCrawl.urls')),
+    # Load page
+    url(r'^novelIndex/', views.novelIndex, name = 'novelIndex'),
+    
 ]
