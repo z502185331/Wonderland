@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, Http404
 
 from models import *
 from helper import *
 
 from datetime import datetime
+from twisted.python import roots
 # the global r for the redis
 
 # the key template in the cache
 user_prefix = 'chatroom(%s)_user_'
 message_prefix = 'chatroom(%s)_msg_'
-room_key = 'chatroom(%s)'
+room_key = 'chatroom(%s)_owner_%s'
+room_info_key = 'chatroom(%s)_info'
 
 def chatIndex(request):
     '''
@@ -21,20 +23,21 @@ def chatIndex(request):
     return render(request, 'page/chatIndex.html', {})
 
 
-def chatroom(request, roomId):
+def chatroom(request, hash):
     '''
     A method to render the page for the chatroom
     The users enter the chatroom
     '''
-    cr = Chatroom.objects.get(id = roomId)
-    return render(request, 'page/chatroom.html', {'chatroom' : cr})
+    global room_info_key
+    info = cache.get(room_info_key % (hash))
+    return render(request, 'page/chatroom.html', {'roomInfo' : info})
     
     
 def getMyRooms(request):
     '''
     A method to list all my chatrooms
     '''
-    chatrooms = readChatroomsFromCache(Chatroom.objects.filter(owner = request.user))
+    chatrooms = readMyRoomsFromCache(request.user)
     return render(request, 'json/chatrooms.json', {'chatrooms':chatrooms}, content_type = 'application/json')
 
 
@@ -42,8 +45,9 @@ def getAllRooms(request):
     '''
     A method to list all the chatrooms
     '''
-    chatrooms = readChatroomsFromCache(Chatroom.objects.all())
+    chatrooms = readAllRoomsFromCache()
     return render(request, 'json/chatrooms.json', {'chatrooms':chatrooms}, content_type = 'application/json')
+
 
 def createRoom(request):
     '''
@@ -53,14 +57,19 @@ def createRoom(request):
         return redirect(reverse('chatIndex'))
     
     title = request.POST['title']
-    chatroom = Chatroom(owner = request.user, title = title)
-    chatroom.save()
+    user = request.user
+    chatroom = Chatroom(owner = user, title = title)
+    hash = chatroom.getHash()
+    
+#     chatroom.save()
     
     # Add chatroom to cache
-    global room_key
-    cache.set(room_key % (chatroom.id), 0, timeout = None)
+    global room_key, room_info_key
+    cache.set(room_key % (hash, user.username), 0, timeout = 300) # Cache count
+    cache.set(room_info_key % (hash), 
+              {'title' : title, 'owner' : user.username, 'hash' : hash}, timeout = 300) 
     
-    return redirect(reverse('chatIndex'))
+    return HttpResponse(hash)
 
 
 def enterRoom(request):
@@ -68,17 +77,19 @@ def enterRoom(request):
     A method to increase the number of user in the chatroom,
     add user into the list, when user enter the chatroom
     '''
-    if 'roomId' not in request.POST or not request.POST['roomId']:
-        return redirect(reverse(chatIndex))
+    if 'roomHash' not in request.POST or not request.POST['roomHash'] or \
+            'roomOwner' not in request.POST or not request.POST['roomOwner']:
+#         return redirect(reverse(chatIndex))
+        raise Http404;
     
-    roomId = request.POST['roomId']
+    hash = request.POST['roomHash']
+    owner = request.POST['roomOwner']
     user = request.user
-    
-    print 'enter' + roomId
+    print hash + ':' + owner
     # Add user to the cache, the number of user increased
     global room_key, user_prefix
-    cache.incr(room_key % (roomId))
-    cache.set(user_prefix % (roomId) + user.username, user.username, timeout = 10)
+    cache.incr(room_key % (hash, owner))
+    cache.set(user_prefix % (hash) + user.username, user.username, timeout = 10)
     return HttpResponse('')
 
 
@@ -100,12 +111,12 @@ def leaveRoom(request):
     return HttpResponse('')
     
 
-def getUsers(request, roomId):
+def getUsers(request, roomHash):
     '''
     A method to display the user list in the chatroom
     '''
-    users = readUsersFromCache(roomId) # read users from cache
-    context = {'roomId' : roomId, 'users' : users}
+    users = readUsersFromCache(roomHash) # read users from cache
+    context = {'users' : users}
     return render(request, 'json/users.json', context, content_type = 'application/json')
     
     
@@ -113,34 +124,34 @@ def sendMsg(request):
     '''
     A method to send a msg in chatroom
     '''
-    if 'roomId' not in request.POST or not request.POST['roomId'] \
+    if 'roomHash' not in request.POST or not request.POST['roomHash'] \
             or 'msg' not in request.POST or not request.POST['msg'] \
                 or 'time' not in request.POST or not request.POST['time']:
         return redirect(reverse('chatIndex'))
     
-    roomId = request.POST['roomId']
+    roomHash = request.POST['roomHash']
     msg = request.POST['msg']
     time = request.POST['time']
     user = request.user
     
     # The metadata of a msg
-    metadata = {'chatroom': roomId, 'user': user, 'msg': msg, 'time': time}
+    metadata = {'chatroom': roomHash, 'user': user, 'msg': msg, 'time': time}
     
     # write to the cache
     global message_prefix
-    cache.set(message_prefix % (roomId) + str(hash(msg)), metadata)
+    cache.set(message_prefix % (roomHash) + str(hash(msg)), metadata)
     return HttpResponse('')
         
 
-def getMsg(request, roomId, refreshTime):
+def getMsg(request, roomHash, refreshTime):
     '''
     A method to get the msg posted in the chatroom from the last refreshTime
     '''
-    msgs = readRecentMsgFromCache(roomId, refreshTime)
-    context = {'roomId' : roomId, 'msgs' : msgs}
+    msgs = readRecentMsgFromCache(roomHash, refreshTime)
+    context = {'roomHash' : roomHash, 'msgs' : msgs}
     user = request.user;
     
     # Refresh the ttl of user in cache
-    cache.set(user_prefix % (roomId) + user.username, user.username, timeout = 10)
+    cache.set(user_prefix % (roomHash) + user.username, user.username, timeout = 10)
     return render(request, 'json/msgs.json', context, content_type = 'application/json')
     

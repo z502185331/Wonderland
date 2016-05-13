@@ -4,7 +4,7 @@
 			{%spaceless%}
 				{
 					"title":"{{room.title}}",
-					"id":"{{room.id}}",
+					"hash":"{{room.hash}}",
 					"count": {{room.count}}
 				}
 			{%endspaceless%}

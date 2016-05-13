@@ -1,15 +1,16 @@
 {% extends "template.html" %} {% block title %}Chatroom:
-{{chatroom.title}}{% endblock %} {% block css %} {% load static %}
+{{roomInfo.title}}{% endblock %} {% block css %} {% load static %}
 <link href="{% static 'css/chatroom.css' %}" rel="stylesheet">
 {% endblock %} 
 
 {% block content %}
-<input type="hidden" id="roomId" value="{{chatroom.id}}">
+<input type="hidden" id="roomHash" value="{{roomInfo.hash}}">
+<input type="hidden" id="roomOwner" value="{{roomInfo.owner}}">
 <div class="row">
 	<div class="col-md-9">
 		<div class="panel panel-primary">
 			<div class="panel-heading" id="accordion">
-				<span class="glyphicon glyphicon-comment"></span> {{chatroom.title}}
+				<span class="glyphicon glyphicon-comment"></span> {{roomInfo.title}}
 			</div>
 			<div class="panel-body">
 				<ul class="chat" id="msgList">

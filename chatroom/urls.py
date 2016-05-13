@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     # Load page
     url(r'^chatIndex$', views.chatIndex, name = 'chatIndex'),
-    url(r'^chatroom/(?P<roomId>\d+)$', views.chatroom, name = 'chatroom'),
+    url(r'^chatroom/(?P<hash>\w+)$', views.chatroom, name = 'chatroom'),
     
     # Action
     url(r'^newRoom/$', views.createRoom, name = 'newRoom'),
@@ -31,8 +31,8 @@ urlpatterns = [
     # AJAX
     url(r'^myChatList/$', views.getMyRooms, name = 'myChatList'),
     url(r'^allChatList/$', views.getAllRooms, name = 'allChatList'),
-    url(r'^chatroom/getUsers/(?P<roomId>\d+)$', views.getUsers, name = 'getUsers'),
-    url(r'^chatroom/getMsg/(?P<roomId>\d+)/(?P<refreshTime>\d+)$', views.getMsg, name = 'getMsg'),
+    url(r'^chatroom/getUsers/(?P<roomHash>\w+)$', views.getUsers, name = 'getUsers'),
+    url(r'^chatroom/getMsg/(?P<roomHash>\w+)/(?P<refreshTime>\d+)$', views.getMsg, name = 'getMsg'),
     
     
 ]

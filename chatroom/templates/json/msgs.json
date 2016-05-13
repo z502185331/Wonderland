@@ -1,5 +1,4 @@
-{ 
-	"roomId":{{roomId}},
+{
   	"msgs":[
 		{% for msg in msgs %}
 			{%spaceless%}

@@ -1,5 +1,4 @@
 { 
-	"roomId":{{roomId}},
   	"users":[
 		{% for user in users %}
 			{%spaceless%}

@@ -1,14 +1,14 @@
 // Get the id of the chatroom
-var roomId = $("#roomId").val();
+var roomHash = $("#roomHash").val();
+var roomOwner = $("#roomOwner").val();
 var lastFreshTime = "lastFreshTime";
 var userList = []
 
 // Enter the room
 window.onload = function() {
 	sessionStorage.setItem(lastFreshTime, (new Date()).getTime());
-	
-	$.post('enterRoom/', {roomId : roomId}).done(function(data) {
-		console.log("Enter room " + roomId);
+	console.log(roomHash + ":" + roomOwner);
+	$.post('enterRoom/', {roomHash : roomHash, roomOwner : roomOwner}).done(function(data) {
 		
 		// Refresh the page
 		refreshPage();
@@ -32,7 +32,7 @@ $("#sendMsg").click(function() {
 	$("#btn-input").val("");    // Clear the input
 	
 	// Send data to server
-	$.post('sendMsg/', {roomId : roomId, msg : msg, time : (new Date()).getTime()}).done(function(data) {
+	$.post('sendMsg/', {roomHash : roomHash, msg : msg, time : (new Date()).getTime()}).done(function(data) {
 		refreshPage();
 	});
 	
@@ -60,13 +60,13 @@ function refreshPage() {
 	sessionStorage.setItem(lastFreshTime, currentTime.getTime());
 	
 	// Refresh msg
-	$.get("getMsg/" + roomId + "/" + lastTime).done(function(data) {
+	$.get("getMsg/" + roomHash + "/" + lastTime).done(function(data) {
 		var msgs = data["msgs"];
 		appendMsg(msgs);
 	});
 	
 	// Refresh user
-	$.get("getUsers/" + roomId).done(function(data){
+	$.get("getUsers/" + roomHash).done(function(data){
 		var users = data["users"];
 		
 		/* Add users who enter the room

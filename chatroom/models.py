@@ -7,9 +7,14 @@ class Chatroom(models.Model):
     owner = models.ForeignKey(User, related_name = 'chatrooms')
     title = models.CharField(max_length = 20)
     publishTime = models.DateTimeField(auto_now = True)
+    hash = models.CharField(max_length = 30)
     
     def getHash(self):
-        return hashlib.md5(self.owner.username + ":" + self.title).hexdigest()
+        return hashlib.md5(self.owner.username + ":" + self.title + ":" + str(self.publishTime)).hexdigest()
+    
+    def save(self, *args, **kwargs):
+        self.hash = hashlib.md5(self.owner.username + ":" + self.title + ":" + str(self.publishTime)).hexdigest()
+        super(Chatroom, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.owner.username + ":" + self.title

@@ -38,7 +38,7 @@ function refreshList(items) {
 		var item = items[i];
 		var content = "<li class=\"list-group-item\">" +
 							"<span class=\"label label-default label-pill pull-right\">" + item["count"] + "</span>" +
-							"<a href=\"chatroom/" + item["id"] + "\">" + item["title"] + "</a>" +
+							"<a href=\"chatroom/" + item["hash"] + "\">" + item["title"] + "</a>" +
 					  "</li> ";
 		$(roomList).append($(content));
 	}
@@ -57,7 +57,7 @@ $("#createRoom").click(function(){
 // A function to create a new chatroom
 function newThread(title) {
 	$.post('newRoom/', {title: title}).done(function(data){
-		location.reload();
+		window.location.href = "chatroom/" + data;
 	});
 }
 
