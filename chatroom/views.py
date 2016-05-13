@@ -7,7 +7,6 @@ from models import *
 from helper import *
 
 from datetime import datetime
-from twisted.python import roots
 # the global r for the redis
 
 # the key template in the cache
@@ -85,10 +84,11 @@ def enterRoom(request):
     hash = request.POST['roomHash']
     owner = request.POST['roomOwner']
     user = request.user
-    print hash + ':' + owner
+
     # Add user to the cache, the number of user increased
     global room_key, user_prefix
-    cache.incr(room_key % (hash, owner))
+    if cache.get(user_prefix % (hash) + user.username) == None:
+        cache.incr(room_key % (hash, owner))
     cache.set(user_prefix % (hash) + user.username, user.username, timeout = 10)
     return HttpResponse('')
 

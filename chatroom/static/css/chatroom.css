@@ -50,13 +50,8 @@
     overflow-y: scroll;
     height: 500px;
 }
-.panel-body-user
-{
-    overflow-y: scroll;
-    height: 550px;
-}
 
-.panel-body-user .userlist {
+.panel-body .userlist {
 	list-style: none;
 	margin: 0;
     padding: 0;
@@ -80,6 +75,10 @@
 .panel-body-user .name {
 	margin-left: 50px;
 	margin-top: 8px;
+}
+
+#saveButton {
+	width: 100%;
 }
 
 
