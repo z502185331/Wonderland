@@ -36,7 +36,7 @@ class QidianCrawler():
             'groupbyparams' : '',
             'impression' : '',
             'roleinfo' : '',
-            'searchtype' : '',
+            'searchtype' : '综合',
             'timespan' : '',
             'noec' : ''
         }
@@ -55,12 +55,13 @@ class QidianCrawler():
         }
     
     
-    def search(self, keyword):
+    def search(self, keyword, startid):
         '''
         A method to search a keyword and return a list of related books
         '''
         result = []
         self.searchRequest['keyword'] = keyword
+        self.searchRequest['start'] = startid * 10
         r = requests.get(
             url = 'http://sosu.qidian.com/ajax/search.ashx',
             params = self.searchRequest,
@@ -76,11 +77,12 @@ class QidianCrawler():
             info['cover'] = book['coverurl'].encode('utf-8')
             info['bookurl'] = book['bookurl'].encode('utf-8')
             result.append(info)
+        print result
         return result
         
 
 
 if __name__ == '__main__':
     c = QidianCrawler()
-    print c.search('暗黑')
+    print c.search('暗黑', 1)
     

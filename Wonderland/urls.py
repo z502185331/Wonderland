@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^wonderland/$', RedirectView.as_view(pattern_name = 'loginIndex')),
     url(r'^wonderland/account/', include('account.urls')),
     url(r'^wonderland/chat/', include('chatroom.urls')),
     url(r'^wonderland/book/', include('novelCrawl.urls')),
