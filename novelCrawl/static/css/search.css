@@ -6,8 +6,17 @@ body{
 	border-radius: 0px;
 }
 
-.search-chooser {
-	/* border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px; */
-	border-radius:0px;
+#seperator {
+	text-align: center;
+	border-bottom: solid 1px #b3b3b3;
+	margin: 20px 0 20px 0;
+}
+
+#seperator b {
+	font-size: 20px;
+}
+
+#booklist {
+	list-style-type: none;
+	padding-left : 0px;
 }

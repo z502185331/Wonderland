@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     # Load page
-    url(r'^login$', views.loginPage, name = 'loginIndex'),
+    url(r'^login', views.loginPage, name = 'loginIndex'),
     url(r'^profile', views.profilePage, name = 'profile'),
     
     # Action

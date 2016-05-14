@@ -118,3 +118,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = STATIC_URL + 'media/'
+LOGIN_URL = '/wonderland/account/login'
+LOGOUT_REDIRECT_URL = 'wonderland/account/login'

@@ -19,6 +19,6 @@ from . import views
 
 urlpatterns = [
     # Load page
-    url(r'^novelIndex/', views.novelIndex, name = 'novelIndex'),
-    
+    url(r'^bookIndex/$', views.bookIndex, name = 'bookIndex'), 
+    url(r'^bookIndex/search', views.search, name = 'search'),
 ]

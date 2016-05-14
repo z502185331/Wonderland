@@ -53,8 +53,12 @@ class QidianCrawler():
             'Accept-Language' : 'en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4',
             'Cookie' : 'pgv_pvi=9399897088; pgv_si=s3466885120; stat_gid=7978187131; stat_sessid=33273497761; ASP.NET_SessionId=bd2qbd45vln0kg55bws2t0nj; stat_id24=0,-1,noimg; us=X; beacon_visit_count=3; refsite=-1'
         }
-        
+    
+    
     def search(self, keyword):
+        '''
+        A method to search a keyword and return a list of related books
+        '''
         result = []
         self.searchRequest['keyword'] = keyword
         r = requests.get(
@@ -72,9 +76,11 @@ class QidianCrawler():
             info['cover'] = book['coverurl'].encode('utf-8')
             info['bookurl'] = book['bookurl'].encode('utf-8')
             result.append(info)
-        print result
+        return result
         
 
 
-
+if __name__ == '__main__':
+    c = QidianCrawler()
+    print c.search('暗黑')
     

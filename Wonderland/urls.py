@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^wonderland/account/', include('account.urls')),
     url(r'^wonderland/chat/', include('chatroom.urls')),
-    url(r'^wonderland/novel/', include('novelCrawl.urls')),
+    url(r'^wonderland/book/', include('novelCrawl.urls')),
 ]

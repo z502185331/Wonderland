@@ -1,0 +1,16 @@
+{
+	"books":[
+		{% for book in books %}
+			{%spaceless%}
+				{
+					"title":"{{book.title}}",
+					"author":"{{book.author}}",
+					"cover": "{{book.cover}}",
+					"description" : "{{book.description}}",
+					"bookurl" : "{{book.bookurl}}"
+				}
+			{%endspaceless%}
+			{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+	]
+}
