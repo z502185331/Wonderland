@@ -7,17 +7,32 @@ $(document).ready(function(e){
 		$('.input-group #search_param').val(param);
 	});
     
-    $("#search-btm").click(function(data) {
-    	var type = $("#search_concept").text();
-    	var keyword = $("#kw-input").val();
-    	$.get('search', {keyword : keyword, type : type}).done(function(data) {
-    		var books = data["books"];
-    		appendBooks(books);
-    	});
-    	$("#kw-input").val('');
-    	$("#booklist").empty();
+    $("#search-btm").click(function(data) { // Search when clicking the button
+    	onSearch();
     })
+    
+    $("#kw-input").keypress(function(e) { // Search when clicking the enter on keyboard
+    	if (e.which == 13) {
+    		onSearch();
+    	}
+    });
 });
+
+/**
+ * A function to search books, when clicking the button or 'enter' key
+ */
+function onSearch() {
+	var type = $("#search_concept").text();
+	var keyword = $("#kw-input").val();
+	$.get('search', {keyword : keyword, type : type}).done(function(data) {
+		var books = data["books"];
+		$("#seperator").css("visibility", "visible");
+		$("#keyword").text(keyword);
+		appendBooks(books);
+	});
+	$("#kw-input").val('');
+	$("#booklist").empty();
+}
 
 /**
  * A function to append the books into the book list
