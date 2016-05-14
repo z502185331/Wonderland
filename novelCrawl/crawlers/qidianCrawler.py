@@ -11,6 +11,7 @@ import uniout
 '''
 Data format:
     (1) Search result:[{'title':.., 'author':..., 'cover':..., 'description':..., 'bookurl':...}]
+    (2) Detailed result: {{'title':.., 'author':..., 'cover':..., 'description':..., 'chapter':..., 'metadata': {......}}
 '''
 
 
@@ -79,10 +80,42 @@ class QidianCrawler():
             result.append(info)
         print result
         return result
+    
+    
+    def getDetails(self):
+        '''
+        A method to get details information about the book
+        '''
+        r = requests.get('http://www.qidian.com/Book/2217895.aspx')
+        tree = html.fromstring(r.content)
+        title = tree.xpath('//h1[@itemprop="name"]/text()')[0]  # title of book
+        author = tree.xpath('//span[@itemprop="author"]//span[@itemprop="name"]/text()')[0] # author of book
+        description = tree.xpath('//span[@itemprop="description"]/text()') # detailed description of book
+        description = '<br>'.join(description)
+        cover = tree.xpath('//div[@class="book_pic"]//img[@itemprop="image"]/@src')[0] # the src of book cover
+        chapters = tree.xpath('//div[@class="opt"]//a[@itemprop="url"]/@href')[0] # the url to the chapter information
         
+        # Get metatdata for the book, which is customized
+        labels = tree.xpath('//div[@class="other"]//div[@class="labels"]//a[@target="_blank"]/text()') # get the labels of the book
+        metadata = {'labels' : labels}
+        
+        # pack all the detailed information
+        result = {}
+        result['title'] = title
+        result['author'] = author
+        result['description'] = description
+        result['cover'] = cover
+        result['chapters'] = chapters
+        result['metadata'] = metadata
+        return result
+    
 
 
 if __name__ == '__main__':
     c = QidianCrawler()
-    print c.search('暗黑', 1)
-    
+    print c.getDetails()
+#     r = requests.get('http://www.qidian.com/Book/2217895.aspx')
+#     print r.content
+#     tree = html.fromstring(r.content)
+#     boxdiv = tree.xpath('//h1[@itemprop="name"]/text()')
+#     print boxdiv
