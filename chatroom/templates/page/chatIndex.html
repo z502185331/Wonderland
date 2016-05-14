@@ -1,18 +1,18 @@
-{% extends "template.html" %} 
+{% extends "template.html" %} {% block title %}Chatrooms{% endblock %}
 
-{% block title %}Chatrooms{% endblock %}
+{% block css %} {% load static %}
+<link href="{% static 'css/chatIndex.css' %}" rel="stylesheet">
+<link href="{% static 'css/bootstrap.min.toggle.css' %}"
+	rel="stylesheet">
 
-{% block css %} 
-{% load static %}
-<link href="{% static 'css/chatIndex.css' %}" ref="stylesheet">
-<link href="{% static 'css/bootstrap.min.toggle.css' %}" rel="stylesheet">
-
-{% endblock %} 
-{% block content %}
+{% endblock %} {% block content %}
 <div class="row">
 	<div class="col-md-9">
-		<button type="button" id="createRoom" class="btn btn-primary pull-right">Create Chatroom</button>
-		<input id="toggleChoice" type="checkbox" checked data-toggle="toggle" data-on="All chatrooms" data-off="My chatrooms" data-onstyle="success" data-offstyle="danger">
+		<button type="button" id="createRoom"
+			class="btn btn-primary pull-right">Create Chatroom</button>
+		<input id="toggleChoice" type="checkbox" checked data-toggle="toggle"
+			data-on="All chatrooms" data-off="My chatrooms"
+			data-onstyle="success" data-offstyle="danger">
 	</div>
 	<div class="col-md-3">
 		<form action="" class="search-form">
@@ -35,9 +35,7 @@
 		</ul>
 	</div>
 </div>
-{% endblock %} 
-
-{% block js %}
+{% endblock %} {% block js %}
 <script src="{% static 'js/bootstrap.min.toggle.js' %}"></script>
 <script src="{% static 'js/chatIndex.js' %}"></script>
 <script src="{% static 'js/csrf_token.js' %}"></script>

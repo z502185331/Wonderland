@@ -1,0 +1,13 @@
+body{
+    margin-top:20px;
+}
+
+.search-input {
+	border-radius: 0px;
+}
+
+.search-chooser {
+	/* border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px; */
+	border-radius:0px;
+}

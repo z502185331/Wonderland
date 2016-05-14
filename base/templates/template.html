@@ -2,9 +2,7 @@
 <html>
 <head>
 
-<title>{% block title %}{% endblock %}</title>
-
-{% load static %}
+<title>{% block title %}{% endblock %}</title> {% load static %}
 <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/template.css' %}" rel="stylesheet">
 
@@ -12,37 +10,35 @@
 </head>
 <body data-gr-c-s-loaded="true">
 
-<!-- Nav bar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+	<!-- Nav bar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="#" class="navbar-brand">Wonderland</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="{% url 'chatIndex' %}">Chat</a></li>
+					<li><a href="{% url 'novelIndex' %}">Novel</a></li>
+				</ul>
+				<ul class="nav navbar-nav pull-right">
+					<li><a href="#"> <span class="glyphicon glyphicon-user"></span>
+							<font id="currentUser">{{user}}</font></a></li>
+					<li><a href="{% url 'onLogout' %}">Logout</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 	<div class="container">
-		<div class="navbar-header">
-			<a href="#" class="navbar-brand">Wonderland</a>
-		</div>
-		<div id="navbar" class="collapse navbar-collapse">
-			<ul class="nav navbar-nav">
-				<li><a href="{% url 'chatIndex' %}">Chat</a></li>
-				<li><a href="{% url 'novelIndex' %}">Novel</a></li>
-			</ul>
-			<ul class="nav navbar-nav pull-right">
-				<li>
-					<a href="#">
-					<span class="glyphicon glyphicon-user"></span>
-					<font id="currentUser">{{user}}</font></a>
-				</li>
-				<li><a href="{% url 'onLogout' %}">Logout</a></li>
-				
-			</ul>
-		</div>
+		<!-- Content of sub page -->
+		{% block content %}{% endblock %}
 	</div>
-</nav>
 
-<div class="container">
-	<!-- Content of sub page -->
-	{% block content %}{% endblock %}
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-{% block js %}{% endblock %}
-</body>	
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	{% block js %}{% endblock %}
+</body>
 </html>
