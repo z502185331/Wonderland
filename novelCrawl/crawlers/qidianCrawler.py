@@ -105,7 +105,11 @@ class QidianCrawler():
         
         # Get metatdata for the book, which is customized
         labels = tree.xpath('//div[@class="other"]//div[@class="labels"]//a[@target="_blank"]/text()') # get the labels of the book
-        metadata = {'labels' : labels}
+        labels = ','.join(labels)
+        total_click = tree.xpath('//div[@class="intro"]/div[@class="data"]/table/tr/td/text()')[1]
+        total_recommation = tree.xpath('//div[@class="intro"]/div[@class="data"]/table/tr/td/text()')[5]
+        total_word = tree.xpath('//div[@class="intro"]/div[@class="data"]/table/tr/td/text()')[7]
+        metadata = {'标签' : labels, '总点击' : total_click, "总推荐" : total_recommation, "总字数" : total_word}
         
         # pack all the detailed information
         result = {}
@@ -121,7 +125,7 @@ class QidianCrawler():
 
 if __name__ == '__main__':
     c = QidianCrawler()
-    print c.getDetails('http://www.qidian.com/Book/2418955.aspx')
+    print c.getDetails('2217895')
 #     r = requests.get('http://www.qidian.com/Book/2217895.aspx')
 #     print r.content
 #     tree = html.fromstring(r.content)
