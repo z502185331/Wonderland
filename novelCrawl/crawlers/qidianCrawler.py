@@ -143,13 +143,26 @@ class QidianCrawler():
         subtitles = tree.xpath('//div[@id="content"]/div[@class="box_title"]/div[@class="title"]/b/text()')
         chapters = tree.xpath('//div[@id="content"]/div[@class="box_cont"]/div[@class="list"]')
         
+        # Clean the subtitles:
+        cleaned_st = []
+        for i in range(len(subtitles)):
+            if subtitles[i] == ']':
+                continue
+            if subtitles[i][-1:] == '[':
+                cleaned_st.append(subtitles[i] + 'VIP]')
+            elif subtitles[i].strip():
+                cleaned_st.append(subtitles[i])
+
         # Arrange the subchapters to its chapters
         chapterlist = []
         for i in range(len(chapters)):
             package = {}
-            package['subtitle'] = subtitles[i]
+            package['subtitle'] = cleaned_st[i]
             package['chapters'] = []
             clist = chapters[i].xpath('ul/li/a/span/text()')
+            if not clist:  # For VIP chapters
+                clist = chapters[i].xpath('ul/li/a/text()')
+                
             urllist = chapters[i].xpath('ul/li/a/@href')
             for j in range(len(clist)):
                 package['chapters'].append({'chapter': clist[j], 
@@ -183,6 +196,6 @@ class QidianCrawler():
 if __name__ == '__main__':
     c = QidianCrawler()
 #     print c.getDetails('2217895')
-    c.getChapters('Y10wqB5vJdk1')
+    print c.getChapters('Y10wqB5vJdk1')
     
     

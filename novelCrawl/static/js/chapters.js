@@ -7,12 +7,6 @@ $(document).ready(function() {
 		$("#chapter-container").css("visibility", "visible");
 		showChapters(data["chapters"]);
 	})
-	
-	$("li").hover(function() {
-        $(this).css('background-color', '#e6e6e6')
-    }, function() {
-        $(this).css('background-color', '')
-    });
 });
 
 
@@ -38,5 +32,12 @@ function showChapters(list) {
 			$(chapter_list).append($(content));
 		}
 		$(div).append($("<div class=\"box_chapter\"><ul id=\"chapter-list\">" + $(chapter_list).html() + "</ul></div>"));
+		
+		// Add hover function
+		$(".chapter").hover(function() {
+	        $(this).css('background-color', '#e6e6e6')
+	    }, function() {
+	        $(this).css('background-color', '')
+	    });
 	}
 }
