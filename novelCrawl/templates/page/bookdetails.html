@@ -15,7 +15,7 @@
 				<div class="col-md-4">
 					<img src="{{info.cover}}" class="img-thumbnail">
 					<button class="btn btn-primary btn-default chapter-btn">
-						<span id="chapter_id" style="display:none;">{{info.chapters}}</span>
+						<span id="bookid" style="display:none;">{{info.chapters}}</span>
 						<span class="glyphicon glyphicon-tasks"></span> 章节目录
 					</button>
 				</div>
@@ -32,6 +32,8 @@
 	</div>
 	<div class="col-md-3">
 		<div class="addi-info-panel">
+			<b>来源：</b>
+			<font class="content" id="source">{{source}}</font>
 			{% for key,value in info.metadata.items %}
 				<b>{{key}}:</b>
 				<font class="content">

@@ -1,6 +1,7 @@
 {
 	"startid" : {{startid}},
 	"keyword" : "{{keyword}}",
+	"source" : "{{source}}",
 	"books":[
 		{% for book in books %}
 			{%spaceless%}

@@ -166,7 +166,7 @@ class QidianCrawler():
             urllist = chapters[i].xpath('ul/li/a/@href')
             for j in range(len(clist)):
                 package['chapters'].append({'chapter': clist[j], 
-                                            'url': self.extract(content_url_pattern, urllist[j])
+                                            'url': urllist[j]
                                             })
                     
                 
@@ -195,7 +195,9 @@ class QidianCrawler():
 
 if __name__ == '__main__':
     c = QidianCrawler()
-#     print c.getDetails('2217895')
-    print c.getChapters('Y10wqB5vJdk1')
+#     print c.getDetails('3386559')
+#     print c.getChapters('Y10wqB5vJdk1')
+    r = requests.get('http://www.qidian.com/Book/3386559.aspx')
+    print r.content
     
     

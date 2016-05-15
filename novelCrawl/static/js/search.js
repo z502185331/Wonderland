@@ -43,15 +43,15 @@ function getDocHeight() {
  */
 function startSearch() {
 	$("#booklist").empty();
-	var type = $("#search_concept").text();
+	var source = $("#search_concept").text();
 	var keyword = $("#kw-input").val();
 	var startid = 0;
 	
 	// Save data to list
 	var list = $("#booklist");
 	list.data("keyword", keyword);
-	list.data("type", type);	
-	fetchBooks(keyword, type, startid);
+	list.data("source", source);	
+	fetchBooks(keyword, source, startid);
 	$("#kw-input").val('');
 	$("#seperator").css("visibility", "visible");
 	$("#keyword").text(keyword);
@@ -62,26 +62,27 @@ function startSearch() {
  */
 function furtherSearch() {
 	var list = $("#booklist");
-	var type = list.data("type");
+	var source = list.data("source");
 	var keyword = list.data("keyword")
 	var startid = list.data("startid") + 1;
-	fetchBooks(keyword, type, startid);
+	fetchBooks(keyword, source, startid);
 }
 
 /**
  * A function to search books, when clicking the button or 'enter' key
  */
-function fetchBooks(keyword, type, startid) {
+function fetchBooks(keyword, source, startid) {
 	$.get('search', {
 		keyword : keyword,
-		type : type,
+		source : source,
 		startid : startid
 	}).done(function(data) {
+		console.log("successful");
 		var books = data["books"];
 		if ($("#booklist").data("startid") == undefined || 
 				parseInt(data["startid"]) > $("#booklist").data("startid")) {
 			$("#booklist").data("startid", parseInt(data["startid"]));
-			appendBooks(books);
+			appendBooks(books, source);
 		}
 	});
 }
@@ -92,7 +93,7 @@ function fetchBooks(keyword, type, startid) {
  * @param books
  *            the books
  */
-function appendBooks(books) {
+function appendBooks(books, source) {
 	var booklist = $("#booklist");
 	for (var i = 0; i < books.length; i++) {
 		var book = books[i];
@@ -103,7 +104,7 @@ function appendBooks(books) {
 									+ "<img class=\"media-object\" src=\"" + book["cover"] + "\">"
 								+ "</a>" 
 								+ "<div class=\"media-body\">" +
-									"<a href=\"/wonderland/book/details/" + book["bookurl"] + "\">"
+									"<a href=\"/wonderland/book/details?source=" + source + "&url=" + book["bookurl"] + "\">"
 									+ "<h4 class=\"media-heading\">" + book["title"] + "</h4></a>"
 									+ "<p class=\"text-right\">By " + book["author"] + "</p>"
 									+ "<p>" + book["description"] + "</p>" 
