@@ -20,5 +20,9 @@ from . import views
 urlpatterns = [
     # Load page
     url(r'^bookIndex/$', views.bookIndex, name = 'bookIndex'), 
+    url(r'^bookIndex/details/(?P<url>\w+)$', views.details, name = 'bookDetails'),
+
+    # Action
     url(r'^bookIndex/search', views.search, name = 'search'),
+    
 ]

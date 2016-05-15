@@ -1,0 +1,28 @@
+.book-info-panel {
+	height : 600px;
+	margin : 5px 0 0 5px;
+}
+
+.book-info-panel img {
+	width : 100%;
+}
+
+.book-info-panel .description {
+	margin-top : 10px;
+}
+
+.addi-info-panel {
+	border: solid 1px #cccccc;
+	border-radius: 5px;
+	min-height: 500px;
+	padding: 10px 5px 5px 10px;
+}
+
+.addi-info-panel b {
+	display : block;
+}
+
+.addi-info-panel .content {
+	font-color : #7f7f7f;
+	margin-left : 20px;
+}

@@ -1,0 +1,46 @@
+{% extends "template.html" %}
+
+{% block title %}{{info.title}}{% endblock %} 
+
+{% block css %}
+{% load static %}
+<link href="{% static 'css/book-details.css' %}" rel="stylesheet"> 
+{% endblock %} 
+
+{% block content %} 
+<div class="row">
+	<div class="col-md-9">
+		<div class="book-info-panel">
+			<div class="row">
+				<div class="col-md-4">
+					<img src="{{info.cover}}" class="img-thumbnail">
+				</div>
+				<div class="col-md-8">
+					<h1>{{info.title}}</h1>
+					by <i>{{info.author}}</i>
+					<div class="description">
+						<p>{{info.description|linebreaks}}</p>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="addi-info-panel">
+			{% for key,values in info.metadata.items %}
+				<b>{{key}}:</b>
+				<font class="content">
+					{% for value in values %}
+						{{value}}
+					{% endfor %}
+				</font>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %} 
+
+{% block js %}
+<script src="{% static 'js/book-details.js' %}"></script>
+{% endblock %}

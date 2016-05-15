@@ -96,14 +96,21 @@ function appendBooks(books) {
 	var booklist = $("#booklist");
 	for (var i = 0; i < books.length; i++) {
 		var book = books[i];
-		var content = "<li>" + "<div class=\"well\">" + "<div class=\"media\">"
-				+ "<a class=\"pull-left\" href=\"#\">"
-				+ "<img class=\"media-object\" src=\"" + book["cover"] + "\">"
-				+ "</a>" + "<div class=\"media-body\">"
-				+ "<h4 class=\"media-heading\">" + book["title"] + "</h4>"
-				+ "<p class=\"text-right\">By " + book["author"] + "</p>"
-				+ "<p>" + book["description"] + "</p>" + "</div>" + "</div>"
-				+ "</div>" + "</li>";
+		var content = "<li>" 
+						+ "<div class=\"well\">" 
+							+ "<div class=\"media\">"
+								+ "<a class=\"pull-left\" href=\"#\">"
+									+ "<img class=\"media-object\" src=\"" + book["cover"] + "\">"
+								+ "</a>" 
+								+ "<div class=\"media-body\">" +
+									"<a href=\"details/" + book["bookurl"] + "\">"
+									+ "<h4 class=\"media-heading\">" + book["title"] + "</h4></a>"
+									+ "<p class=\"text-right\">By " + book["author"] + "</p>"
+									+ "<p>" + book["description"] + "</p>" 
+								+ "</div>"
+							+ "</div>"
+						+ "</div>" 
+				+ "</li>";
 		$(booklist).append(content);
 	}
 
