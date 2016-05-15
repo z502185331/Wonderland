@@ -1,9 +1,40 @@
 #title-container {
 	text-align: center;
+	border-bottom: dashed 1px #7f7f7f;
+	visibility: hidden;
+	padding-bottom: 10px;
 }
 
 #title {
 	color: red;
 	font-size: 40px;
 	display: block;
+}
+
+#chapter-container {
+	border: solid 1px #f7f7f7;
+	margin-top: 20px;
+	visibility: hidden;
+}
+
+
+.box_title {
+	background-color: #e6e6e6;
+	padding: 5px 0 5px 10px;
+	font-family: STXihei;
+	margin-bottom: 10px;
+}
+
+.box_chapter ul{
+	list-style-type: none;
+	margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.box_chapter ul li {
+	float: left;
+	width: 33.33%;
+	padding: 5px 0 5px 10px;
+	font-family: STXihei;
 }

@@ -183,6 +183,6 @@ class QidianCrawler():
 if __name__ == '__main__':
     c = QidianCrawler()
 #     print c.getDetails('2217895')
-    print c.getChapters('MbzrKlm-dSI1')
+    c.getChapters('Y10wqB5vJdk1')
     
     
