@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+
+{% block title %}Chapters{% endblock %} 
+
+{% block css %}
+{% load static %}
+<link href="{% static 'css/chapters.css' %}" rel="stylesheet"> 
+{% endblock %} 
+
+{% block content %} 
+<input id="url" type="hidden" value="{{url}}">
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div id="title-container">
+			<font id="title" class="text-center"></font>
+			<i id="author"></i>
+		</div>
+		
+	</div>
+</div>
+{% endblock %} 
+
+{% block js %}
+<script src="{% static 'js/chapters.js' %}"></script>
+{% endblock %}

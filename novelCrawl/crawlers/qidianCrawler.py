@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 #-*-coding:utf-8 -*-
 
-from lxml import html
+from lxml.html import fromstring
 import requests
 import json
 from bs4 import BeautifulSoup
 from BeautifulSoup import BeautifulSoup
 import re
 import uniout
+from django.template.defaultfilters import title
 
 '''
 Data format:
@@ -18,6 +19,10 @@ Data format:
 
 search_template = 'http://sosu.qidian.com/searchresult.aspx?keyword=%s'
 detail_url_template = 'http://www.qidian.com/Book/%s.aspx'
+detail_url_pattern = 'http://www.qidian.com/Book/(.*?).aspx'
+chapter_url_template = 'http://read.qidian.com/BookReader/%s.aspx'
+chapter_url_pattern = 'http://read.qidian.com/BookReader/(.*?).aspx'
+content_url_pattern = 'http://read.qidian.com/BookReader/.*?,(.*?).aspx'
 
 class QidianCrawler():
     
@@ -62,10 +67,10 @@ class QidianCrawler():
         '''
         A method to search a keyword and return a list of related books
         '''
+        global detail_url_pattern
         result = []
         self.searchRequest['keyword'] = keyword
         self.searchRequest['start'] = startid * 10
-        pattern = re.compile('http://www.qidian.com/Book/(.*?).aspx') # Reg to extract the bookid
         r = requests.get(
             url = 'http://sosu.qidian.com/ajax/search.ashx',
             params = self.searchRequest,
@@ -79,12 +84,7 @@ class QidianCrawler():
             info['author'] = book['authorname'].encode('utf-8')
             info['description'] = book['description'].encode('utf-8')
             info['cover'] = book['coverurl'].encode('utf-8')
-            url = book['bookurl'].encode('utf-8')
-            m = pattern.match(url)
-            if m:
-                info['bookurl'] = m.group(1)
-            else:
-                info['bookurl'] = url
+            info['bookurl'] = self.extract(detail_url_pattern, book['bookurl'].encode('utf-8'))
             result.append(info)
         return result
     
@@ -93,15 +93,20 @@ class QidianCrawler():
         '''
         A method to get details information about the book
         '''
-        global detail_url_template
+        global detail_url_template, chapter_url_pattern
+        
         r = requests.get(detail_url_template % link)
-        tree = html.fromstring(r.content)
+        tree = fromstring(r.content)
+        
+        # Get basic detailed information of a book
         title = tree.xpath('//h1[@itemprop="name"]/text()')[0]  # title of book
         author = tree.xpath('//span[@itemprop="author"]//span[@itemprop="name"]/text()')[0] # author of book
         description = tree.xpath('//span[@itemprop="description"]/text()') # detailed description of book
         description = ''.join(description)
         cover = tree.xpath('//div[@class="book_pic"]//img[@itemprop="image"]/@src')[0] # the src of book cover
-        chapters = tree.xpath('//div[@class="opt"]//a[@itemprop="url"]/@href')[0] # the url to the chapter information
+        chapters = self.extract(chapter_url_pattern, 
+                                tree.xpath('//div[@class="opt"]//a[@itemprop="url"]/@href')[0]) # the url to the chapter information
+        
         
         # Get metatdata for the book, which is customized
         labels = tree.xpath('//div[@class="other"]//div[@class="labels"]//a[@target="_blank"]/text()') # get the labels of the book
@@ -121,13 +126,63 @@ class QidianCrawler():
         result['metadata'] = metadata
         return result
     
-
+    def getChapters(self, link):
+        '''
+        A method to get the chapter list
+        '''
+        result = {}
+        bookid = link
+        global chapter_url_template, content_url_pattern
+        link = chapter_url_template % link
+        r = requests.get(link)
+        tree = fromstring(r.content)
+        
+        # Get the basic information and chapters from a book
+        title = tree.xpath('//div[@class="booktitle"]/h1/text()')[0]
+        author = tree.xpath('//div[@class="booktitle"]/span/a/text()')[0]
+        subtitles = tree.xpath('//div[@id="content"]/div[@class="box_title"]/div[@class="title"]/b/text()')
+        chapters = tree.xpath('//div[@id="content"]/div[@class="box_cont"]/div[@class="list"]')
+        
+        # Arrange the subchapters to its chapters
+        chapterlist = []
+        for i in range(len(chapters)):
+            package = {}
+            package['subtitle'] = subtitles[i]
+            package['chapters'] = []
+            clist = chapters[i].xpath('ul/li/a/span/text()')
+            urllist = chapters[i].xpath('ul/li/a/@href')
+            for j in range(len(clist)):
+                package['chapters'].append({'chapter': clist[j], 
+                                            'url': self.extract(content_url_pattern, urllist[j])
+                                            })
+                    
+                
+            chapterlist.append(package)
+        
+        # pack the data
+        result['title'] = title
+        result['author'] = author
+        result['bookid'] = bookid
+        result['chapters'] = chapterlist
+        return result
+    
+        
+    def extract(self, pattern, target):
+        '''
+        A method to extract information by using regix
+        '''
+        result = None
+        p = re.compile(pattern)
+        m = p.match(target)
+        if m:
+            result = m.group(1)
+        else:
+            result = target
+        return result
 
 if __name__ == '__main__':
     c = QidianCrawler()
-    print c.getDetails('2217895')
-#     r = requests.get('http://www.qidian.com/Book/2217895.aspx')
-#     print r.content
-#     tree = html.fromstring(r.content)
-#     boxdiv = tree.xpath('//h1[@itemprop="name"]/text()')
-#     print boxdiv
+#     print c.getDetails('2217895')
+    print c.getChapters('MbzrKlm-dSI1')
+    
+    

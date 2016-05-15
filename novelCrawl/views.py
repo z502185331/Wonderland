@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from crawlers.qidianCrawler import QidianCrawler
 from django.http.response import HttpResponse, Http404
+import json
 # Create your views here.
 
 # the crawler to do the crawl job
@@ -36,14 +37,33 @@ def search(request):
 
 
 @login_required
-def details(request, url):
+def getDetails(request, url):
     '''
     A method to show the details of a book
     '''
-#     if 'url' not in request.GET or request.GET['url']:
-#         raise Http404
-#     url = request.GET['url']
-    global crawler
+    crawler = QidianCrawler()
     info = crawler.getDetails(url)
     return render(request, 'page/bookdetails.html', {'info' : info})
+
+@login_required
+def chapterPage(request, url):
+    '''
+    A method to open the page for the chapters
+    '''
+    return render(request, 'page/chapters.html', {'url' : url})
+
+
+@login_required
+def getChapters(request):
+    '''
+    A method to get the chapter info from book
+    '''
+    print 'hello'
+    if 'url' not in request.GET or not request.GET['url']:
+        raise Http404
+    url = request.GET['url']
+    print url
+    crawler = QidianCrawler()
+    info = crawler.getChapters(url)
+    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type = 'application/json')
     

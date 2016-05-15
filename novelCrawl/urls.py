@@ -20,9 +20,11 @@ from . import views
 urlpatterns = [
     # Load page
     url(r'^bookIndex/$', views.bookIndex, name = 'bookIndex'), 
-    url(r'^bookIndex/details/(?P<url>\w+)$', views.details, name = 'bookDetails'),
+    url(r'^details/(?P<url>\w+)$', views.getDetails, name = 'bookDetails'),
+    url(r'^chapters/(?P<url>.*)$', views.chapterPage, name = 'bookChapters'),
 
     # Action
     url(r'^bookIndex/search', views.search, name = 'search'),
+    url(r'^getChapters', views.getChapters),
     
 ]

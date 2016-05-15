@@ -14,7 +14,10 @@
 			<div class="row">
 				<div class="col-md-4">
 					<img src="{{info.cover}}" class="img-thumbnail">
-					<a href="#" class="btn btn-primary btn-default chapter-btn"><span class="glyphicon glyphicon-tasks"></span> 章节目录</a>
+					<button class="btn btn-primary btn-default chapter-btn">
+						<span id="chapter_id" style="display:none;">{{info.chapters}}</span>
+						<span class="glyphicon glyphicon-tasks"></span> 章节目录
+					</button>
 				</div>
 				<div class="col-md-8">
 					<h1>{{info.title}}</h1>

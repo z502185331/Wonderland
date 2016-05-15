@@ -103,7 +103,7 @@ function appendBooks(books) {
 									+ "<img class=\"media-object\" src=\"" + book["cover"] + "\">"
 								+ "</a>" 
 								+ "<div class=\"media-body\">" +
-									"<a href=\"details/" + book["bookurl"] + "\">"
+									"<a href=\"/wonderland/book/details/" + book["bookurl"] + "\">"
 									+ "<h4 class=\"media-heading\">" + book["title"] + "</h4></a>"
 									+ "<p class=\"text-right\">By " + book["author"] + "</p>"
 									+ "<p>" + book["description"] + "</p>" 
