@@ -3,14 +3,11 @@
 
 from lxml.html import fromstring
 import requests
-import json
-from bs4 import BeautifulSoup
-from BeautifulSoup import BeautifulSoup
 import re
 import uniout
-from django.template.defaultfilters import title
 
 '''
+Data source: 起点中文网
 Data format:
     (1) Search result:[{'title':.., 'author':..., 'cover':..., 'description':..., 'bookurl':...}]
     (2) Detailed result: {{'title':.., 'author':..., 'cover':..., 'description':..., 'chapter':..., 'metadata': {......}}
@@ -197,7 +194,7 @@ if __name__ == '__main__':
     c = QidianCrawler()
 #     print c.getDetails('3386559')
 #     print c.getChapters('Y10wqB5vJdk1')
-    r = requests.get('http://www.qidian.com/Book/3386559.aspx')
+    r = requests.get('http://big5.quanben5.com/index.php?c=book&a=search&keywords=暗黑')
     print r.content
     
     

@@ -42,15 +42,18 @@ function getDocHeight() {
  * Start searching
  */
 function startSearch() {
+	
 	$("#booklist").empty();
 	var source = $("#search_concept").text();
 	var keyword = $("#kw-input").val();
+	$("#instruction").text("正在搜索相关书籍： " + keyword);
 	var startid = 0;
 	
 	// Save data to list
 	var list = $("#booklist");
 	list.data("keyword", keyword);
 	list.data("source", source);	
+	list.data("startid", -1);
 	fetchBooks(keyword, source, startid);
 	$("#kw-input").val('');
 	$("#seperator").css("visibility", "visible");
@@ -79,7 +82,15 @@ function fetchBooks(keyword, source, startid) {
 	}).done(function(data) {
 		console.log("successful");
 		var books = data["books"];
-		if ($("#booklist").data("startid") == undefined || 
+		
+		// If no results
+		if (books.length == 0) {
+			$("#instruction").text("对不起， 我们找不到相关书籍： " + keyword);
+		} else {
+			$("#instruction").text("一共找到" + books.length.toString() + "本相关书籍： " + keyword);
+		}
+		
+		if ($("#booklist").data("startid") == -1 || 
 				parseInt(data["startid"]) > $("#booklist").data("startid")) {
 			$("#booklist").data("startid", parseInt(data["startid"]));
 			appendBooks(books, source);

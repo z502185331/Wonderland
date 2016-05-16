@@ -2,8 +2,10 @@
 #-*-coding:utf-8 -*-
 
 from qidianCrawler import QidianCrawler
+from quanbenCrawler import QuanbenCrawler
 
-crawler_dict = {'起点中文网' : QidianCrawler()}
+crawler_dict = {'起点中文网' : QidianCrawler(),
+                '全本小说网' : QuanbenCrawler()}
 
 class CrawlerFactory:
     
