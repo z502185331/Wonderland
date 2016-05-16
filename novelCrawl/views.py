@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from crawlers.qidianCrawler import QidianCrawler
 from django.http.response import HttpResponse, Http404
 from crawlers.CrawlerFactory import CrawlerFactory
 import json
@@ -15,7 +14,9 @@ def bookIndex(request):
     '''
     A method to show the index of novel page
     '''
-    return render(request, 'page/search.html', {})
+    global factory
+    sources = factory.crawler_dict.keys()
+    return render(request, 'page/search.html', {'sources' : sources})
 
 @login_required
 def search(request):
@@ -72,7 +73,26 @@ def getChapters(request):
     '''
     A method to get the chapter info from book
     '''
-    print 'hello'
+    if 'url' not in request.GET or not request.GET['url'] \
+            or 'source' not in request.GET or not request.GET['source']:
+        raise Http404
+    url = request.GET['url']
+    source = request.GET['source'].encode('utf-8')
+    print url
+    
+    
+    global factory
+    crawler = factory.getCrawler(source)
+    info = crawler.getChapters(url)
+    print info
+    return HttpResponse(json.dumps(info), content_type = 'application/json')
+
+
+@login_required
+def contentPage(request):
+    '''
+    A method to open the content page
+    '''
     if 'url' not in request.GET or not request.GET['url'] \
             or 'source' not in request.GET or not request.GET['source']:
         raise Http404
@@ -81,6 +101,10 @@ def getChapters(request):
     
     global factory
     crawler = factory.getCrawler(source)
-    info = crawler.getChapters(url)
-    return HttpResponse(json.dumps(info, ensure_ascii=False), content_type = 'application/json')
+    info = crawler.getContent(url)
+    return render(request, 'page/bookContent.html', {'info': info})
+
+# @login_required
+# def getContent(request):
+    
     

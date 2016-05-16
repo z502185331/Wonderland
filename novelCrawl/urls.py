@@ -22,9 +22,11 @@ urlpatterns = [
     url(r'^$', views.bookIndex, name = 'bookIndex'), 
     url(r'^details', views.getDetails, name = 'bookDetails'),
     url(r'^chapters', views.chapterPage, name = 'bookChapters'),
+    url(r'^content', views.contentPage),
 
     # Action
     url(r'^search', views.search, name = 'search'),
     url(r'^getChapters', views.getChapters),
+#     url(r'^getContent',)
     
 ]

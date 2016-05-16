@@ -10,7 +10,8 @@ import uniout
 Data source: 起点中文网
 Data format:
     (1) Search result:[{'title':.., 'author':..., 'cover':..., 'description':..., 'bookurl':...}]
-    (2) Detailed result: {{'title':.., 'author':..., 'cover':..., 'description':..., 'chapter':..., 'metadata': {......}}
+    (2) Detailed result: {'title':.., 'author':..., 'cover':..., 'description':..., 'chapters':..., 'metadata': {......}}
+    (3) Chapters result: {'title':..., 'author':..., 'chapters': [{'subtitle':..., 'chapters':{'chapter':..., 'url':...}}]}
 '''
 
 
@@ -123,6 +124,7 @@ class QidianCrawler():
         result['metadata'] = metadata
         return result
     
+    
     def getChapters(self, link):
         '''
         A method to get the chapter list
@@ -176,7 +178,7 @@ class QidianCrawler():
         result['chapters'] = chapterlist
         return result
     
-        
+    
     def extract(self, pattern, target):
         '''
         A method to extract information by using regix

@@ -16,8 +16,9 @@
                     	<span id="search_concept">起点中文网</span><span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="#contains">起点中文网</a></li>
-                      <li><a href="#contains">全本小说网</a></li>
+                    	{% for source in sources %}
+                    		<li><a href="#">{{source}}</a></li>
+                    	{% endfor %}
                     </ul>
                 </div>
                 <input type="hidden" name="search_param" value="all" id="search_param">         

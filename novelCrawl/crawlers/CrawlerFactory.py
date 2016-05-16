@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 #-*-coding:utf-8 -*-
 
-from qidianCrawler import QidianCrawler
-from quanbenCrawler import QuanbenCrawler
+from QidianCrawler import QidianCrawler
+from QuanbenCrawler import QuanbenCrawler
 
-crawler_dict = {'起点中文网' : QidianCrawler(),
-                '全本小说网' : QuanbenCrawler()}
 
 class CrawlerFactory:
     
+    def __init__(self):
+        self.crawler_dict = {
+            '起点中文网' : QidianCrawler(),
+            '全本小说网' : QuanbenCrawler()
+        }
+    
     def getCrawler(self, source):
-        global crawler_dict
-        return crawler_dict[source]
+        return self.crawler_dict[source]
     
 if __name__ == '__main__' :
     c = CrawlerFactory()

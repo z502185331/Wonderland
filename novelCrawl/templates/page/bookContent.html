@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+
+{% block title %}Content{% endblock %} 
+
+{% block css %}
+{% load static %}
+<link href="{% static 'css/book-content.css' %}" rel="stylesheet"> 
+{% endblock %} 
+
+{% block content %} 
+<div class="row">
+	<div class="col-md-8 col-md-offset-2"></div>
+</div>
+{{info.title}}<br>
+{{info.chapter}}<br>
+{% autoescape off %}
+{{info.content}}
+{% endautoescape %} 
+{% endblock %} 
+
+{% block js %}
+<script src="{% static 'js/book-content.js' %}"></script>
+{% endblock %}
