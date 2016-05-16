@@ -121,7 +121,7 @@ class QuanbenCrawler:
         
         info['title'] = self.locateData(tree, '//div[@class="row"]/span/text()', 0)
         info['chapter'] = self.locateData(tree, '//div[@class="content"]/h1[@class="title1"]/text()', 0)
-        info['content'] = '</p><p>'.join(tree.xpath('//div[@id="content"]/p/text()'))
+        info['content'] = '<p>' + '</p><p>'.join(tree.xpath('//div[@id="content"]/p/text()'))
         return info
         
         

@@ -9,13 +9,29 @@
 
 {% block content %} 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2"></div>
+	<div class="col-md-8 col-md-offset-2">
+		<div class="title-containter">
+			<font class="title">{{info.title}}</font>
+		</div>
+	</div>
 </div>
-{{info.title}}<br>
-{{info.chapter}}<br>
-{% autoescape off %}
-{{info.content}}
-{% endautoescape %} 
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="content-containter">
+			<div class="chapter">
+				<b><font>{{info.chapter}}</font></b>
+			</div>
+			<div class="content">
+				{% autoescape off %}
+					{{info.content}}
+				{% endautoescape %} 
+			</div>
+		</div>
+	</div>
+</div>
+
+
 {% endblock %} 
 
 {% block js %}

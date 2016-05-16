@@ -1,0 +1,33 @@
+.title-containter {
+	text-align: center;
+	border-bottom: dashed 1px #7f7f7f;
+	
+}
+
+.title-containter .title {
+	font-size: 25px;
+	font-family: KaiTi;
+}
+
+.content-containter {
+	border: solid 2px #f7f7f7;
+	margin-top: 20px;
+}
+
+.content-containter .chapter {
+	padding: 5px 0 5px 0;
+	background-color: #e6e6e6;
+	text-align: center;
+}
+
+.content-containter .chapter font {
+	font-size: 18px;
+}
+
+.content-containter .content {
+	padding: 10px 5px 10px 5px;
+}
+
+.content-containter .content p {
+	text-indent: 30px;
+}
