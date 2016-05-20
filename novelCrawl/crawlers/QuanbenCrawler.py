@@ -15,8 +15,6 @@ import requests
 from lxml.html import fromstring
 import uniout
 import re
-from django.template.defaultfilters import title
-from langconv import *
 
 search_url_template = 'http://big5.quanben5.com/index.php?c=book&a=search&keywords=%s'
 resource_url_template = 'http://big5.quanben5.com%s'
