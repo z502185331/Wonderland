@@ -9,9 +9,21 @@
 
 {% block content %} 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2">
-		<div class="title-containter">
-			<font class="title">{{info.title}}</font>
+	<div class="col-md-8 col-md-offset-2 title-containter">
+		<div class="row">
+			<div class="col-md-2">
+				{% if pre_chapter %}
+				<span><a href="{{pre_chapter.url}}">前一章节</a></span>
+				{% endif %}
+			</div>
+			<div class="col-md-8">
+				<font class="title">{{info.title}}</font>
+			</div>
+			<div class="col-md-2">
+				{% if next_chapter %}
+				<span><a href="{{next_chapter.url}}">后一章节</a></span>
+				{% endif %}
+			</div>
 		</div>
 	</div>
 </div>

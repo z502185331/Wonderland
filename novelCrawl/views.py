@@ -98,11 +98,21 @@ def contentPage(request):
         raise Http404
     url = request.GET['url']
     source = request.GET['source'].encode('utf-8')
+    context = {}
     
     global factory
     crawler = factory.getCrawler(source)
     info = crawler.getContent(url)
-    return render(request, 'page/bookContent.html', {'info': info})
+    context['info'] = info
+    
+    neighbors = crawler.getNeighbors(url)
+    if 'pre_chapter' in neighbors:
+        context['pre_chapter'] = neighbors['pre_chapter']
+    if 'next_chapter' in neighbors:
+        context['next_chapter'] = neighbors['next_chapter']
+    print context
+    
+    return render(request, 'page/bookContent.html', context)
 
 # @login_required
 # def getContent(request):

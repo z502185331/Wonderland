@@ -1,7 +1,6 @@
 .title-containter {
 	text-align: center;
 	border-bottom: dashed 1px #7f7f7f;
-	
 }
 
 .title-containter .title {
@@ -10,9 +9,8 @@
 }
 
 .content-containter {
-	border: solid 2px #f7f7f7;
 	margin-top: 20px;
-	background-color: #fff2e6;
+	background-color: #fff5e6;
 }
 
 .content-containter .chapter {

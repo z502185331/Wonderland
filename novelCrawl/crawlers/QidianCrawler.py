@@ -194,9 +194,9 @@ class QidianCrawler():
 
 if __name__ == '__main__':
     c = QidianCrawler()
-#     print c.getDetails('3386559')
+    print c.getDetails('3386559')
 #     print c.getChapters('Y10wqB5vJdk1')
-    r = requests.get('http://big5.quanben5.com/index.php?c=book&a=search&keywords=暗黑')
-    print r.content
+#     r = requests.get('http://big5.quanben5.com/index.php?c=book&a=search&keywords=暗黑')
+#     print r.content
     
     

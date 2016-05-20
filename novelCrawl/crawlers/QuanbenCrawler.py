@@ -8,6 +8,7 @@ Data format:
     (2) Detailed result: {{'title':.., 'author':..., 'cover':..., 'description':..., 'chapters':..., 'metadata': {......}}
     (3) Chapters result: {'title':..., 'author':..., 'chapters': [{'subtitle':..., 'chapters':{'chapter':..., 'url':...}}]}
     (4) Content result: {'title':..., 'chapter':..., 'content': ...}
+    (5) Neighbor result: {"pre_chapter":{'url':...,'chapter':...}, "next_chapter":{'url':...,'chapter':...}}
 '''
 
 
@@ -15,13 +16,16 @@ import requests
 from lxml.html import fromstring
 import uniout
 import re
+import sitecustomize
+from django.core.cache import cache
 
 search_url_template = 'http://big5.quanben5.com/index.php?c=book&a=search&keywords=%s'
 resource_url_template = 'http://big5.quanben5.com%s'
 book_url_template = 'http://big5.quanben5.com/n/%s/'
 book_url_pattern = '/n/(.*?)/(.*?).html'
-
 content_url_template = '/wonderland/book/content?url=%s&source=全本小说网'
+
+source = 'quanbenxiaoshuowang'
 
 
 
@@ -77,12 +81,12 @@ class QuanbenCrawler:
         return info
         
 
-    def getChapters(self, link):
+    def getChapters(self, url):
         '''
         A method to get the chapter list
         '''
-        global resource_url_template, content_url_template, book_url_pattern
-        link = resource_url_template % link
+        global resource_url_template, content_url_template, book_url_pattern, source
+        link = resource_url_template % url
 
         info = {}
         r = requests.get(link)
@@ -92,7 +96,7 @@ class QuanbenCrawler:
         info['author'] = self.locateData(tree, '//div[@class="pic_txt_list"]/p[@class="info"]/span/text()', 0)
         info['chapters'] = []
         
-        
+        cached_list = {}
         boxes = tree.xpath('//div[@class="row"]//div[@class="box"]')
         for box in boxes[2:]:
             package = {}
@@ -102,10 +106,18 @@ class QuanbenCrawler:
             for chapter in clist:
                 item = {}
                 item['chapter'] = self.locateData(chapter, 'a/span/text()', 0)
-                item['url'] = content_url_template % self.locateData(chapter, 'a/@href', 0)
+                
+                tmp = self.locateData(chapter, 'a/@href', 0)
+                item['url'] = content_url_template % tmp
                 package['chapters'].append(item)
-            
+                
+                chapterid = self.extract(book_url_pattern, tmp, 2) 
+                cached_list[int(chapterid)] = item
             info['chapters'].append(package)
+            
+        # save the list to the cache
+        title = self.extract(book_url_pattern, url, 1)
+        cache.set(source + '_' + title, cached_list, timeout = 3600)
         return info
     
     
@@ -113,13 +125,21 @@ class QuanbenCrawler:
         '''
         A method to get the url of previous chapter and next chapter
         '''
-        result = []
-        global book_url_pattern, content_url_template
+        result = {}
+        global book_url_pattern, content_url_template, source
         bookid = self.extract(book_url_pattern, link, 1)
         chapterid = int(self.extract(book_url_pattern, link, 2))
         
-        result.append(content_url_template % ('/n/%s/%d.html' % (bookid, chapterid - 1)))
-        result.append(content_url_template % ('/n/%s/%d.html' % (bookid, chapterid + 1)))
+        # Check whether the data is cached
+        key = source + '_' + bookid
+        if cache.get(key) == None:
+            self.getChapters('/n/%s/xiaoshuo.html' % bookid)
+        
+        chapter_list = cache.get(key)
+        if (chapterid - 1) in chapter_list:
+            result['pre_chapter'] = chapter_list[chapterid - 1]
+        if (chapterid + 1) in chapter_list:
+            result['next_chapter'] = chapter_list[chapterid + 1]
         return result
     
     
@@ -149,6 +169,7 @@ class QuanbenCrawler:
         else:
             return ''
     
+    
     def extract(self, pattern, target, index):
         '''
         A method to extract information by using regix
@@ -162,12 +183,13 @@ class QuanbenCrawler:
             result = target
         return result
     
+    
 if __name__ == '__main__':
     c = QuanbenCrawler()
 #     c.search('神奇', 0)
 #     print c.getDetails('doushentianxia')
 #     c.getChapters('/n/anyingjie/xiaoshuo.html')
 #     c.getContent('/n/anheiwangzuo/26125.html')
-    print c.getNeighbors('/n/anyingjie/19209.html')
+    print c.getNeighbors('/n/anyingjie/19211.html')
         
         
