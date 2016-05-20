@@ -16,12 +16,14 @@ from lxml.html import fromstring
 import uniout
 import re
 from django.template.defaultfilters import title
+from langconv import *
 
 search_url_template = 'http://big5.quanben5.com/index.php?c=book&a=search&keywords=%s'
 resource_url_template = 'http://big5.quanben5.com%s'
 book_url_template = 'http://big5.quanben5.com/n/%s/'
-book_url_pattern = '/n/(.*?)/'
-content_url_pattern = '/wonderland/book/content?url=%s&source=全本小说网'
+book_url_pattern = '/n/(.*?)/(.*?).html'
+
+content_url_template = '/wonderland/book/content?url=%s&source=全本小说网'
 
 
 
@@ -36,7 +38,7 @@ class QuanbenCrawler:
         if startid != 0:
             return result
         
-        global search_url_template, book_url_pattern, resource_url_template
+        global search_url_template, resource_url_template
         r = requests.get(search_url_template % keyword)
         tree = fromstring(r.content)
         
@@ -46,7 +48,7 @@ class QuanbenCrawler:
             info['cover'] = resource_url_template % self.locateData(book, 'div[@class="pic"]/img/@src', 0)
             info['title'] = ''.join(book.xpath('h3/a/span/descendant-or-self::text()')) # Join the <span> and <b>
             info['author'] = self.locateData(book, 'p[@class="info"]/span/text()', 0)
-            info['bookurl'] = self.extract(book_url_pattern, self.locateData(book, 'h3/a/@href', 0))
+            info['bookurl'] = self.extract('/n/(.*?)/', self.locateData(book, 'h3/a/@href', 0), 1)
             info['description'] = ' '.join((self.locateData(book, 'p[@class="description"]/text()', 0)).split())
             result.append(info)
             print info['title']
@@ -82,7 +84,7 @@ class QuanbenCrawler:
         '''
         A method to get the chapter list
         '''
-        global resource_url_template, content_url_pattern
+        global resource_url_template, content_url_pattern, book_url_pattern
         link = resource_url_template % link
 
         info = {}
@@ -105,8 +107,23 @@ class QuanbenCrawler:
                 item['chapter'] = self.locateData(chapter, 'a/span/text()', 0)
                 item['url'] = content_url_pattern % self.locateData(chapter, 'a/@href', 0)
                 package['chapters'].append(item)
+            
             info['chapters'].append(package)
         return info
+    
+    
+    def getNeighbors(self, link):
+        '''
+        A method to get the url of previous chapter and next chapter
+        '''
+        result = []
+        global book_url_pattern, content_url_template
+        bookid = self.extract(book_url_pattern, link, 1)
+        chapterid = int(self.extract(book_url_pattern, link, 2))
+        
+        result.append(content_url_template % ('/n/%s/%d.html' % (bookid, chapterid - 1)))
+        result.append(content_url_template % ('/n/%s/%d.html' % (bookid, chapterid + 1)))
+        return result
     
     
     def getContent(self, link):
@@ -123,9 +140,8 @@ class QuanbenCrawler:
         info['chapter'] = self.locateData(tree, '//div[@class="content"]/h1[@class="title1"]/text()', 0)
         info['content'] = '<p>' + '</p><p>'.join(tree.xpath('//div[@id="content"]/p/text()'))
         return info
-        
-        
-            
+    
+    
     def locateData(self, tree, path, index):
         '''
         Locate the data by xpath, clean the data and return it
@@ -136,7 +152,7 @@ class QuanbenCrawler:
         else:
             return ''
     
-    def extract(self, pattern, target):
+    def extract(self, pattern, target, index):
         '''
         A method to extract information by using regix
         '''
@@ -144,7 +160,7 @@ class QuanbenCrawler:
         p = re.compile(pattern)
         m = p.match(target)
         if m:
-            result = m.group(1)
+            result = m.group(index)
         else:
             result = target
         return result
@@ -153,7 +169,8 @@ if __name__ == '__main__':
     c = QuanbenCrawler()
 #     c.search('神奇', 0)
 #     print c.getDetails('doushentianxia')
-#     print c.getChapters('/n/anyingjie/xiaoshuo.html')
-    c.getContent('/n/anheiwangzuo/26125.html')
+#     c.getChapters('/n/anyingjie/xiaoshuo.html')
+#     c.getContent('/n/anheiwangzuo/26125.html')
+    print c.getNeighbors('/n/anyingjie/19209.html')
         
         

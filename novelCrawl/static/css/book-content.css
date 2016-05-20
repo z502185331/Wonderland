@@ -30,4 +30,6 @@
 
 .content-containter .content p {
 	text-indent: 30px;
+	line-height: 200%;
+	font-size : 15px;
 }
