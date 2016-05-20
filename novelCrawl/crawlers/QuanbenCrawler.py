@@ -51,7 +51,6 @@ class QuanbenCrawler:
             info['bookurl'] = self.extract('/n/(.*?)/', self.locateData(book, 'h3/a/@href', 0), 1)
             info['description'] = ' '.join((self.locateData(book, 'p[@class="description"]/text()', 0)).split())
             result.append(info)
-            print info['title']
         return result
     
     
