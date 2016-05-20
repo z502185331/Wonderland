@@ -12,11 +12,12 @@
 .content-containter {
 	border: solid 2px #f7f7f7;
 	margin-top: 20px;
+	background-color: #fff2e6;
 }
 
 .content-containter .chapter {
 	padding: 5px 0 5px 0;
-	background-color: #e6e6e6;
+	background-color: #ffe6cc;
 	text-align: center;
 }
 

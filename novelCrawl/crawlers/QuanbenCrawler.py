@@ -84,7 +84,7 @@ class QuanbenCrawler:
         '''
         A method to get the chapter list
         '''
-        global resource_url_template, content_url_pattern, book_url_pattern
+        global resource_url_template, content_url_template, book_url_pattern
         link = resource_url_template % link
 
         info = {}
@@ -105,7 +105,7 @@ class QuanbenCrawler:
             for chapter in clist:
                 item = {}
                 item['chapter'] = self.locateData(chapter, 'a/span/text()', 0)
-                item['url'] = content_url_pattern % self.locateData(chapter, 'a/@href', 0)
+                item['url'] = content_url_template % self.locateData(chapter, 'a/@href', 0)
                 package['chapters'].append(item)
             
             info['chapters'].append(package)
