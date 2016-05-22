@@ -110,7 +110,6 @@ def contentPage(request):
         context['pre_chapter'] = neighbors['pre_chapter']
     if 'next_chapter' in neighbors:
         context['next_chapter'] = neighbors['next_chapter']
-    print context
     
     return render(request, 'page/bookContent.html', context)
 

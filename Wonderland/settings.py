@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'account',
     'base',
     'novelCrawl',
+    'shop',
 )
 
 MIDDLEWARE_CLASSES = (

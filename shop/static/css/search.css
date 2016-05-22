@@ -1,0 +1,23 @@
+body{
+    margin-top:20px;
+}
+
+.search-input {
+	border-radius: 0px;
+}
+
+#seperator {
+	text-align: center;
+	border-bottom: solid 1px #b3b3b3;
+	margin: 20px 0 20px 0;
+	visibility: hidden;
+}
+
+#seperator b {
+	font-size: 20px;
+}
+
+#booklist {
+	list-style-type: none;
+	padding-left : 0px;
+}
